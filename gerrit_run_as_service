@@ -1,0 +1,29 @@
+In my case it was ubuntu 14.04
+
+
+1. 
+  Ignore https://gerrit-review.googlesource.com/Documentation/install.html and replace
+  # Required-Start: $named $remote $syslog
+  with
+  # Required-Start: $all
+  at /review_site/bin/gerrit.sh
+
+2.
+  sudo ln -snf `pwd`/review_site/bin/gerrit.sh /etc/init.d/gerrit
+  sudo ln -snf /etc/init.d/gerrit /etc/rc3.d/S90gerrit
+
+3.
+  sudo update-rc.d -f gerrit remove
+  sudo update-rc.d gerrit defaults 92
+
+4.
+  Replace GERRIT_SITE_1=`dirname "$0"`/..
+  with 
+  GERRIT_SITE_1=`pwd`/review_site/bin/..
+  at /review_site/bin/gerrit.sh
+
+5.
+  systemctl daemon-reload
+
+6.
+  service gerrit start
